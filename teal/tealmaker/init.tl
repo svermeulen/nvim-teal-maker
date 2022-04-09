@@ -33,7 +33,41 @@ local function should_prune_files():boolean
    return ok and result
 end
 
+local function get_most_recent_modification_time(dir:string, extension:string):integer
+   local most_recent_time = 0
+
+   for _, path in ipairs(vim.fn.globpath(dir, "**/*." .. extension, 0, 1)) do
+      local changetime = vim.fn.getftime(path)
+
+      if changetime > most_recent_time then
+         most_recent_time = changetime
+      end
+   end
+
+   return most_recent_time
+end
+
+local function should_build_project(project_dir:string):boolean
+   local teal_dir = util.join_paths(project_dir, "teal")
+
+   if vim.fn.isdirectory(teal_dir) ~= 1 then
+      return false
+   end
+
+   local lua_dir = util.join_paths(project_dir, "lua")
+   return get_most_recent_modification_time(teal_dir, "tl") > get_most_recent_modification_time(lua_dir, "lua")
+end
+
 local function build_project(project_dir:string, verbose:boolean)
+
+   if not should_build_project(project_dir) then
+      if verbose then
+         print(string.format("Skipped teal project at '%s' because teal files have not changed since last build", project_dir))
+      end
+
+      return
+   end
+
    local all_output:{string} = {}
 
    local build_args = {"cyan", "build"}
