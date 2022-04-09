@@ -76,12 +76,16 @@ function tealmaker.build_all(verbose:boolean):boolean
    end
 
    local plugin_paths = vim.api.nvim_list_runtime_paths()
+   local our_plugin_name = "nvim-teal-maker"
 
    for _, plugin_path in ipairs(plugin_paths) do
-      local config_path = util.join_paths(plugin_path, "tlconfig.lua")
+      -- Skip ourselves to avoid the performance hit there
+      if plugin_path:sub(#plugin_path + 1 - #our_plugin_name) ~= our_plugin_name then
+         local config_path = util.join_paths(plugin_path, "tlconfig.lua")
 
-      if vim.fn.filereadable(config_path) == 1 then
-         build_project(plugin_path, verbose)
+         if vim.fn.filereadable(config_path) == 1 then
+            build_project(plugin_path, verbose)
+         end
       end
    end
 end
