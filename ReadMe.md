@@ -11,7 +11,7 @@ This plugin requires that both [tl](https://github.com/teal-language/tl) and [cy
 
 1. Install the plugin using whatever neovim plugin manager you prefer.
 
-2. Place some `tl` files inside a `/teal` directory underneath one of the directories on the neovim `runtimepath` (see `:h runtimepath` for details).  If you're not making a plugin and instead want to just write some neovim configuration in `teal`, you should be able to just add a `/teal` directory alongside your `init.lua`
+2. Place some `tl` files inside a `/teal` directory underneath one of the directories on the neovim `runtimepath` (see `:h runtimepath` for details).  If you're not making a plugin and instead want to just write some neovim configuration in `teal`, you should be able to just add a `/teal` directory alongside your `init.lua` / `init.vim`
 
 3. Also place a file named `tlconfig.lua` alongside the `/teal` directory with contents:
 
@@ -23,16 +23,18 @@ This plugin requires that both [tl](https://github.com/teal-language/tl) and [cy
   }
   ```
 
+  * See documentation for [tl](https://github.com/teal-language/tl) / [cyan](https://github.com/teal-language/cyan) for more details on the config file.
+
 4. Open/restart neovim
 
-5. Done.  Your `tl` files inside the `/teal` directory should now have been compiled to lua and placed where neovim expects them (the `/lua` directory)
+5. Execute `:TealBuild`
 
-6. After editting your teal files, you can update them manually by any of the following methods:
+6. Your `tl` files inside the `/teal` directory should now have been compiled to lua and placed where neovim expects them (the `/lua` directory)
 
-  * Calling the command `:TealBuild`
-  * Binding something to `<plug>(TealBuild)` (eg: `nmap <leader>ct <plug>(TealBuild)`)
-  * Calling `tealmaker#BuildAll(1)` or `tealmaker#BuildAll(0)` from VimL (pass 1 for verbose build output)
-  * Importing TealMaker directly from your own teal/lua and calling build:
+7. In addition to the `:TealBuild` command, you can also trigger a teal build by doing any of the following:
+
+  * Calling `tealmaker#BuildAll(1)` or `tealmaker#BuildAll(0)` from VimL (pass `1` for verbose build output)
+  * Importing `tealmaker` directly from your own teal/lua and calling build:
       ```
       local tealmaker = require("tealmaker")
       local verbose_output = true
@@ -41,11 +43,8 @@ This plugin requires that both [tl](https://github.com/teal-language/tl) and [cy
 
 ## Default Options
 
-* `let g:TealMaker_BuildAllOnStartup = 1`
-    * Set this to 0 to disable the automatic cyan build on startup and avoid the performance hit
-
 * `let g:TealMaker_Prune = 0`
-    * Set this to 1 to automatically delete any lua files that don't have corresponding teal files.  However - requires a version of [cyan](https://github.com/teal-language/cyan) that has `--prune` option (version must be > `0.1.0`).  Also note that when this option is enabled, any lua files inside the `/teal` directory will be automatically copied to `/lua` as well, since you can't place lua files inside `/lua` directly, and it can be common to have some source files in lua.
+    * Set this to `1` to automatically delete any lua files that don't have corresponding teal files.  However - requires a version of [cyan](https://github.com/teal-language/cyan) that has `--prune` option (version must be > `0.1.0`).  Also note that when this option is enabled, any lua files inside the `/teal` directory will be automatically copied to `/lua` as well, since you can't place lua files inside `/lua` directly with this option enabled, and it can be common to have some source files in lua.
 
 ## How It Works
 
@@ -58,6 +57,8 @@ This same approach was also done for [moonscript](https://moonscript.org/) in th
 * In order to make the most of teal, you will need type definitions for any lua-based libraries you're using.  In particular, you will at least want to grab the type definitions for the `vim` lua object, which you can find in the [teal-types](https://github.com/teal-language/teal-types) repo.  You can also add your own type definitions for any lua files you're using by placing `*.d.tl` files in your `/teal` directory
 
 * If you are writing a plugin, you don't need to depend on this plugin, since you can just include the compiled lua files (which is exactly what this plugin does)
+
+* If you're adding a `/teal` directory alongside your `init.lua`, you should 
 
 * Make sure to place this plugin earlier in the list of plugins with whatever plugin manager you're using, so that the `tl` files will be compiled as soon as possible.  This would be important if you're calling any of the generated lua code during startup from one of your own plugins.
 
