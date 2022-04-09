@@ -120,7 +120,7 @@ call tealmaker#buildAll()
 lua require('my_config')
 ```
 
-* Note that we are calling `call tealmaker#buildAll()` immediately after adding the 'nvim-teal-maker' plugin to our runtimepath via vim-plug.  This is important, otherwise the `lua require('my_config')` line below that might load an older version of `my_config`
+* Note that we are calling `call tealmaker#buildAll()` before the call to `lua require('my_config')`. This is important, since otherwise the `require` would load the previously compiled version.
 
 * With the above set up, we can now directly modify our `my_config.tl` file and the corresponding lua files will be automatically built the next time neovim is started.  Try changing something in `my_config.tl`, restarting neovim, and verifying that this works
 
@@ -128,10 +128,6 @@ lua require('my_config')
 
 * `let g:TealMaker_Prune = 0`
     * Set this to `1` to automatically delete any lua files that don't have corresponding teal files.  However - requires a version of [cyan](https://github.com/teal-language/cyan) that has `--prune` option (version must be > `0.1.0`).  Also note that when this option is enabled, any lua files inside the `/teal` directory will be automatically copied to `/lua` as well, since you can't place lua files inside `/lua` directly with this option enabled, and it can be common to have some source files in lua.
-
-## TODO
-
-* Better error display.  Support for parsing errors to quickfix window.
 
 ## Tips
 
