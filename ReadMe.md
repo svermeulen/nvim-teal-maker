@@ -1,7 +1,7 @@
 
 ## Nvim Teal Maker
 
-This plugin adds support for writing neovim plugins/configuration in [teal](https://github.com/teal-language/tl) instead of or in addition to lua
+This plugin adds support for writing neovim plugins/configuration in [teal](https://github.com/teal-language/tl) instead of (or in addition to) lua
 
 ## Requirements
 
@@ -11,7 +11,7 @@ This plugin requires that both [tl](https://github.com/teal-language/tl) and [cy
 
 1. Install the plugin using whatever neovim plugin manager you prefer.
 
-2. Place some `tl` files inside a `/teal` directory underneath one of the directories on the neovim `runtimepath` (see `:h runtimepath` for details)
+2. Place some `tl` files inside a `/teal` directory underneath one of the directories on the neovim `runtimepath` (see `:h runtimepath` for details).  If you're not making a plugin and instead want to just write some neovim configuration in `teal`, you should be able to just add a `/teal` directory alongside your `init.lua`
 
 3. Also place a file named `tlconfig.lua` alongside the `/teal` directory with contents:
 
@@ -47,6 +47,8 @@ This plugin requires that both [tl](https://github.com/teal-language/tl) and [cy
 ## How It Works
 
 This plugin follows the conventions that already exist in neovim for both lua and python. On startup, neovim will automatically modify the lua `package.path` value, so that any lua `require` statements will find any `lua` files inside any `/lua` directories on the neovim `runtimepath`.  Neovim also supports a `/python` directory which works similarly.  This plugin follows this same convention by adding support for a `/teal` directory on the runtimepath as well.
+
+This same approach was also done for [moonscript](https://moonscript.org/) in the [nvim-moonmaker](https://github.com/svermeulen/nvim-moonmaker) plugin
 
 ## Tips
 
