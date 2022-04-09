@@ -26,11 +26,11 @@ local function copy_lua_files(project_dir:string, verbose:boolean)
 end
 
 local function should_prune_files():boolean
-   local ok, result = pcall(function():integer
-      return vim.api.nvim_get_var("TealMaker_Prune") as integer
+   local ok, result = pcall(function():boolean
+      return vim.api.nvim_get_var("TealMaker_Prune") as boolean
    end)
 
-   return ok and result == 1
+   return ok and result
 end
 
 local function build_project(project_dir:string, verbose:boolean)

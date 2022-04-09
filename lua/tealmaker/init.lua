@@ -30,7 +30,7 @@ local function should_prune_files()
       return vim.api.nvim_get_var("TealMaker_Prune")
    end)
 
-   return ok and result == 1
+   return ok and result
 end
 
 local function build_project(project_dir, verbose)
