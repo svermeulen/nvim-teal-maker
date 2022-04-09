@@ -28,6 +28,7 @@ return {
 5. Done.  Your `tl` files inside the `/teal` directory should now have been compiled to lua and placed where neovim expects them (the `/lua` directory)
 
 6. After editting your teal files, you can update them manually by any of the following methods:
+
   * Calling the command `:TealBuild`
   * Binding something to `<plug>(TealBuild)` (eg: `nmap <leader>ct <plug>(TealBuild)`)
   * Calling `tealmaker#BuildAll(1)` or `tealmaker#BuildAll(0)` from VimL (pass 1 for verbose build output)
