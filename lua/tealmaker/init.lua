@@ -25,10 +25,25 @@ local function copy_lua_files(project_dir, verbose)
    end
 end
 
+local function should_prune_files()
+   local ok, result = pcall(function()
+      return vim.api.nvim_get_var("TealMaker_Prune")
+   end)
+
+   return ok and result == 1
+end
+
 local function build_project(project_dir, verbose)
    local all_output = {}
 
-   local job_id = vim.fn.jobstart({ "cyan", "build", "--prune" }, {
+   local build_args = { "cyan", "build" }
+   local should_prune = should_prune_files()
+
+   if should_prune then
+      table.insert(build_args, "--prune")
+   end
+
+   local job_id = vim.fn.jobstart(build_args, {
       cwd = project_dir,
       stdout_buffered = true,
       stderr_buffered = true,
@@ -61,9 +76,11 @@ local function build_project(project_dir, verbose)
          print(string.format("Successfully built project at '%s'\n%s", project_dir, table.concat(all_output, '\n')))
       end
 
+      if should_prune then
 
 
-      copy_lua_files(project_dir, verbose)
+         copy_lua_files(project_dir, verbose)
+      end
    end
 end
 

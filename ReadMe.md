@@ -44,6 +44,9 @@ This plugin requires that both [tl](https://github.com/teal-language/tl) and [cy
 * `let g:TealMaker_BuildAllOnStartup = 1`
     * Set this to 0 to disable the automatic cyan build on startup and avoid the performance hit
 
+* `let g:TealMaker_Prune = 0`
+    * Set this to 1 to automatically delete any lua files that don't have corresponding teal files.  However - requires a version of [cyan](https://github.com/teal-language/cyan) that has `--prune` option (version must be > `0.1.0`).  Also note that when this option is enabled, any lua files inside the `/teal` directory will be automatically copied to `/lua` as well, since you can't place lua files inside `/lua` directly, and it can be common to have some source files in lua.
+
 ## How It Works
 
 This plugin follows the conventions that already exist in neovim for both lua and python. On startup, neovim will automatically modify the lua `package.path` value, so that any lua `require` statements will find any `lua` files inside any `/lua` directories on the neovim `runtimepath`.  Neovim also supports a `/python` directory which works similarly.  This plugin follows this same convention by adding support for a `/teal` directory on the runtimepath as well.
@@ -52,9 +55,7 @@ This same approach was also done for [moonscript](https://moonscript.org/) in th
 
 ## Tips
 
-* In order to make the most of teal, you will need type definitions for any lua-based libraries you're using.  In particular, you will at least want to grab the type definitions for the `vim` lua object, which you can find in the [teal-types](https://github.com/teal-language/teal-types) repo
-
-* It can be common to have some parts of your code in lua and some parts in teal.  Note that you cannot place lua files inside your `/lua` directory because they will be removed the next time the `/teal` directory is built.  However - you can place lua files inside the `teal` directory, alongside your `.tl` files, and these will be copied to the `/lua` directory the next time `:TealBuild` is executed.  Note also that if you want your `foo.lua` file to be accessible to your teal code, you will need to add a `foo.d.tl` file alongisde it as well.
+* In order to make the most of teal, you will need type definitions for any lua-based libraries you're using.  In particular, you will at least want to grab the type definitions for the `vim` lua object, which you can find in the [teal-types](https://github.com/teal-language/teal-types) repo.  You can also add your own type definitions for any lua files you're using by placing `*.d.tl` files in your `/teal` directory
 
 * If you are writing a plugin, you don't need to depend on this plugin, since you can just include the compiled lua files (which is exactly what this plugin does)
 

@@ -25,10 +25,25 @@ local function copy_lua_files(project_dir:string, verbose:boolean)
    end
 end
 
+local function should_prune_files():boolean
+   local ok, result = pcall(function():integer
+      return vim.api.nvim_get_var("TealMaker_Prune") as integer
+   end)
+
+   return ok and result == 1
+end
+
 local function build_project(project_dir:string, verbose:boolean)
    local all_output:{string} = {}
 
-   local job_id = vim.fn.jobstart({"cyan", "build", "--prune"}, {
+   local build_args = {"cyan", "build"}
+   local should_prune = should_prune_files()
+
+   if should_prune then
+      table.insert(build_args, "--prune")
+   end
+
+   local job_id = vim.fn.jobstart(build_args, {
       cwd = project_dir,
       stdout_buffered = true,
       stderr_buffered = true,
@@ -61,9 +76,11 @@ local function build_project(project_dir:string, verbose:boolean)
          print(string.format("Successfully built project at '%s'\n%s", project_dir, table.concat(all_output, '\n')))
       end
 
-      -- Unfortunately, cyan deletes all lua files in the output directory, so we need to copy them back
-      -- More info here: https://github.com/teal-language/cyan/issues/19
-      copy_lua_files(project_dir, verbose)
+      if should_prune then
+         -- Unfortunately, cyan --prune deletes all lua files in the output directory, so we need to copy them back
+         -- More info here: https://github.com/teal-language/cyan/issues/19
+         copy_lua_files(project_dir, verbose)
+      end
    end
 end
 
