@@ -69,11 +69,22 @@ local function build_project(project_dir, verbose)
 
    local results = vim.fn.jobwait({ job_id })
 
+   local function get_all_output()
+      local raw_output = table.concat(all_output, '\n')
+
+      local text_output = raw_output:gsub('\x1b%[%d+;%d+;%d+;%d+;%d+m', ''):
+      gsub('\x1b%[%d+;%d+;%d+;%d+m', ''):
+      gsub('\x1b%[%d+;%d+;%d+m', ''):
+      gsub('\x1b%[%d+;%d+m', ''):
+      gsub('\x1b%[%d+m', '')
+      return text_output
+   end
+
    if results[1] ~= 0 then
-      error(string.format("Build failed for project at '%s'\n%s", project_dir, table.concat(all_output, '\n')))
+      print(string.format("Build failed for project at '%s'\n%s", project_dir, get_all_output()))
    else
       if verbose then
-         print(string.format("Successfully built project at '%s'\n%s", project_dir, table.concat(all_output, '\n')))
+         print(string.format("Successfully built project at '%s'\n%s", project_dir, get_all_output()))
       end
 
       if should_prune then

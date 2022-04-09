@@ -19,7 +19,7 @@ This same approach was also done for [moonscript](https://moonscript.org/) in th
 
 2. Place some `tl` files inside a `/teal` directory underneath one of the directories on the neovim `runtimepath` (see `:h runtimepath` for details).  If you're not making a plugin and instead want to just write some neovim configuration in `teal`, you can also just add a `/teal` directory alongside your `init.lua` / `init.vim`
 
-3. Place a file named `tlconfig.lua` alongside the `/teal` directory with contents:
+3. Place a file named `tlconfig.lua` alongside the `/teal` directory with the following contents.  See documentation for [tl](https://github.com/teal-language/tl) / [cyan](https://github.com/teal-language/cyan) for more details on this config file.
 
   ```
   return {
@@ -29,8 +29,6 @@ This same approach was also done for [moonscript](https://moonscript.org/) in th
   }
   ```
 
-  * See documentation for [tl](https://github.com/teal-language/tl) / [cyan](https://github.com/teal-language/cyan) for more details on this config file.
-
 5. Execute `:TealBuild`
 
 6. Your `tl` files inside the `/teal` directory should now have been compiled to lua and placed where neovim expects them (the `/lua` directory)
@@ -39,14 +37,14 @@ Notes:
 
 * In addition to `:TealBuild`, there are several other ways to trigger a teal build:
 
-    1. Directly from lua/teal by importing `tealmaker`:
+    * Directly from lua/teal by importing `tealmaker`:
 
     ```
     local verbose_output = false
     require("tealmaker").build_all(verbose_output)
     ```
 
-    2. By calling `tealmaker#BuildAll` from VimL:
+    * By calling `tealmaker#BuildAll` from VimL:
 
     ```
     local verbose_output = 0
@@ -65,6 +63,7 @@ Plug 'svermeulen/nvim-teal-maker'
 call plug#end()
 ```
 
+* Note that we assume you already have [vim-plug](https://github.com/junegunn/vim-plug) installed.  Of course, any other plugin manager would be fine as well.
 * Add a `/teal` directory next to your `init.vim`
 * Place a file named `my_config.tl` inside `/teal` with some neovim configuration.  As a random example:
 
@@ -129,6 +128,10 @@ lua require('my_config')
 
 * `let g:TealMaker_Prune = 0`
     * Set this to `1` to automatically delete any lua files that don't have corresponding teal files.  However - requires a version of [cyan](https://github.com/teal-language/cyan) that has `--prune` option (version must be > `0.1.0`).  Also note that when this option is enabled, any lua files inside the `/teal` directory will be automatically copied to `/lua` as well, since you can't place lua files inside `/lua` directly with this option enabled, and it can be common to have some source files in lua.
+
+## TODO
+
+* Better error display.  Support for parsing errors to quickfix window.
 
 ## Tips
 
