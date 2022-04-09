@@ -33,13 +33,13 @@ local function should_prune_files()
    return ok and result
 end
 
-local function get_most_recent_modification_time(dir, extension)
-   local most_recent_time = 0
+local function try_get_most_recent_modification_time(dir, extension)
+   local most_recent_time = nil
 
    for _, path in ipairs(vim.fn.globpath(dir, "**/*." .. extension, 0, 1)) do
       local changetime = vim.fn.getftime(path)
 
-      if changetime > most_recent_time then
+      if most_recent_time == nil or changetime > most_recent_time then
          most_recent_time = changetime
       end
    end
@@ -54,8 +54,20 @@ local function should_build_project(project_dir)
       return false
    end
 
+   local teal_change_time = try_get_most_recent_modification_time(teal_dir, "tl")
+
+   if teal_change_time == nil then
+      return false
+   end
+
    local lua_dir = util.join_paths(project_dir, "lua")
-   return get_most_recent_modification_time(teal_dir, "tl") > get_most_recent_modification_time(lua_dir, "lua")
+   local lua_change_time = try_get_most_recent_modification_time(lua_dir, "lua")
+
+   if lua_change_time == nil then
+      return true
+   end
+
+   return teal_change_time > lua_change_time
 end
 
 local function build_project(project_dir, verbose)
