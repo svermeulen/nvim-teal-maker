@@ -28,26 +28,24 @@ return {
 5. Done.  Your `tl` files inside the `/teal` directory should now have been compiled to lua and placed where neovim expects them (the `/lua` directory)
 
 6. After editting your teal files, you can update them manually by any of the following methods:
-* Calling the command `:TealBuild`
-* Binding something to `<plug>(TealBuild)` (eg: `nmap <leader>ct <plug>(TealBuild)`)
-* Calling `tealmaker#BuildAll()` from VimL
-* Importing TealMaker directly from your own lua and calling compile:
-    ```
-    TODO
-    ```
-* Importing TealMaker directly from your own teal and calling compile:
-    ```
-    TODO
-    ```
+  * Calling the command `:TealBuild`
+  * Binding something to `<plug>(TealBuild)` (eg: `nmap <leader>ct <plug>(TealBuild)`)
+  * Calling `tealmaker#BuildAll(1)` or `tealmaker#BuildAll(0)` from VimL (pass 1 for verbose build output)
+  * Importing TealMaker directly from your own teal/lua and calling build:
+      ```
+      local tealmaker = require("tealmaker")
+      local verbose_output = true
+      tealmaker.build_all(verbose_output)
+      ```
 
 ## Default Options
 
 * `let g:TealMaker_BuildAllOnStartup = 1`
-    * Set this to 0 to disable the automatic cyan build on startup
+    * Set this to 0 to disable the automatic cyan build on startup and avoid the performance hit
 
 ## How It Works
 
-Before explaining what this plugin does in more detail, it's helpful to understand how the built-in lua support works in neovim.  On startup, neovim will automatically modify the lua `package.path` value, so that any lua `require` statements will find any `lua` files inside any `/lua` directories on the neovim `runtimepath`.  Neovim also supports a `/python` directory which works similarly.  This plugin follows this same convention by adding support for a `/teal` directory on the runtimepath as well.
+This plugin follows the conventions that already exist in neovim for both lua and python. On startup, neovim will automatically modify the lua `package.path` value, so that any lua `require` statements will find any `lua` files inside any `/lua` directories on the neovim `runtimepath`.  Neovim also supports a `/python` directory which works similarly.  This plugin follows this same convention by adding support for a `/teal` directory on the runtimepath as well.
 
 ## Tips
 
