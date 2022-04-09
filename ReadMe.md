@@ -11,9 +11,9 @@ This plugin requires that both [tl](https://github.com/teal-language/tl) and [cy
 
 1. Install the plugin using whatever neovim plugin manager you prefer.
 
-1. Place some `tl` files inside a `/teal` directory underneath one of the directories on the neovim `runtimepath` (see `:h runtimepath` for details)
+2. Place some `tl` files inside a `/teal` directory underneath one of the directories on the neovim `runtimepath` (see `:h runtimepath` for details)
 
-1. Also place a file named `tlconfig.lua` alongside the `/teal` directory with contents:
+3. Also place a file named `tlconfig.lua` alongside the `/teal` directory with contents:
 
   ```
   return {
@@ -23,11 +23,11 @@ This plugin requires that both [tl](https://github.com/teal-language/tl) and [cy
   }
   ```
 
-1. Open/restart neovim
+4. Open/restart neovim
 
-1. Done.  Your `tl` files inside the `/teal` directory should now have been compiled to lua and placed where neovim expects them (the `/lua` directory)
+5. Done.  Your `tl` files inside the `/teal` directory should now have been compiled to lua and placed where neovim expects them (the `/lua` directory)
 
-1. After editting your teal files, you can update them manually by any of the following methods:
+6. After editting your teal files, you can update them manually by any of the following methods:
 
   * Calling the command `:TealBuild`
   * Binding something to `<plug>(TealBuild)` (eg: `nmap <leader>ct <plug>(TealBuild)`)
